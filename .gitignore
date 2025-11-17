@@ -1,0 +1,10 @@
+node_modules/
+npm-debug.log*
+.env
+data.json
+uploads/
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
