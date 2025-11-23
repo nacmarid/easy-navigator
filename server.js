@@ -10,6 +10,7 @@ const cors = require('cors');
 const { body, validationResult } = require('express-validator');
 
 const app = express();
+app.set('trust proxy', 1); 
 const PORT = process.env.PORT || 5000;
 const SECRET = process.env.JWT_SECRET;
 const DATA_FILE = path.join(__dirname, 'data.json');
