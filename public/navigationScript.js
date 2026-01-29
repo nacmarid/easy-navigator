@@ -179,15 +179,34 @@ function updateLocationSelects() {
   }
 }
 
-// Функция воспроизведения маршрута
 function playRoute() {
-  const a = pointA.value;
-  const b = pointB.value;
-  if (!a || !b || a === b) return log('Выберите разные точки');
+  const fromSelect = document.getElementById('fromSelect');
+  const toSelect = document.getElementById('toSelect');
+  if (!fromSelect || !toSelect) {
+    log('Элементы выбора не найдены');
+    return;
+  }
+
+  const a = fromSelect.value;
+  const b = toSelect.value;
+
+  if (!a || !b || a === b) {
+    log('Выберите разные точки');
+    return;
+  }
 
   const routeKey = `${a}|${b}`;
   const route = approvedData.routes[routeKey];
-  if (!route) return log('Видео не найдено');
+  if (!route) {
+    log('Видео не найдено');
+    return;
+  }
+
+  const playerContainer = document.getElementById('player');
+  if (!playerContainer) {
+    log('Контейнер плеера не найден');
+    return;
+  }
 
   // Очистить плеер
   playerContainer.innerHTML = '';
@@ -205,7 +224,7 @@ function playRoute() {
     } else if (route.includes('rutube.ru/play/embed/')) {
       // RuTube embed
       const iframe = document.createElement('iframe');
-      iframe.src = route;
+      iframe.src = route.trim(); // ← убираем пробелы!
       iframe.width = '100%';
       iframe.height = '400';
       iframe.frameBorder = '0';
@@ -216,7 +235,7 @@ function playRoute() {
     // Новый формат: { url: "...", type: "rutube" }
     if (route.type === 'rutube') {
       const iframe = document.createElement('iframe');
-      iframe.src = route.url;
+      iframe.src = route.url.trim(); // ← убираем пробелы!
       iframe.width = '100%';
       iframe.height = '400';
       iframe.frameBorder = '0';
