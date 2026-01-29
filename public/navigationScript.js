@@ -179,54 +179,59 @@ function updateLocationSelects() {
   }
 }
 
+// Функция воспроизведения маршрута
 function playRoute() {
-  const fromSelect = document.getElementById('fromSelect');
-  const toSelect = document.getElementById('toSelect');
-  
-  if (!fromSelect || !toSelect) {
-    alert('Элементы выбора не найдены');
-    return;
-  }
-  
-  const from = fromSelect.value;
-  const to = toSelect.value;
-  
-  if (!from || !to) {
-    alert('Выберите начальную и конечную локации');
-    return;
-  }
-  
-  if (from === to) {
-    alert('Начальная и конечная локации не могут совпадать');
-    return;
-  }
-  
-  const routeKey = `${from}|${to}`;
-  const url = approvedData.routes ? approvedData.routes[routeKey] : null;
-  
-  if (!url) {
-    alert('Видео для этого маршрута не найдено');
-    return;
-  }
-  
-  const player = document.getElementById('player');
-  const videoInfo = document.getElementById('videoInfo');
-  
-  const fromName = fromSelect.selectedOptions[0].text;
-  const toName = toSelect.selectedOptions[0].text;
-  
-  player.src = url;
-  player.load();
-  player.play().catch(e => {
-    console.error('Play error:', e);
-    alert('Ошибка воспроизведения видео');
-  });
-  
-  if (videoInfo) {
-    videoInfo.textContent = `Маршрут: ${fromName} → ${toName}`;
+  const a = pointA.value;
+  const b = pointB.value;
+  if (!a || !b || a === b) return log('Выберите разные точки');
+
+  const routeKey = `${a}|${b}`;
+  const route = approvedData.routes[routeKey];
+  if (!route) return log('Видео не найдено');
+
+  // Очистить плеер
+  playerContainer.innerHTML = '';
+
+  // Проверяем тип ссылки
+  if (typeof route === 'string') {
+    // Старый формат — .mp4 или прямая ссылка
+    if (route.includes('.mp4') || route.includes('.m3u8')) {
+      const video = document.createElement('video');
+      video.src = route;
+      video.controls = true;
+      video.style.width = '100%';
+      playerContainer.appendChild(video);
+      video.play();
+    } else if (route.includes('rutube.ru/play/embed/')) {
+      // RuTube embed
+      const iframe = document.createElement('iframe');
+      iframe.src = route;
+      iframe.width = '100%';
+      iframe.height = '400';
+      iframe.frameBorder = '0';
+      iframe.allowFullscreen = true;
+      playerContainer.appendChild(iframe);
+    }
+  } else if (route && typeof route === 'object') {
+    // Новый формат: { url: "...", type: "rutube" }
+    if (route.type === 'rutube') {
+      const iframe = document.createElement('iframe');
+      iframe.src = route.url;
+      iframe.width = '100%';
+      iframe.height = '400';
+      iframe.frameBorder = '0';
+      iframe.allowFullscreen = true;
+      playerContainer.appendChild(iframe);
+    } else {
+      const video = document.createElement('video');
+      video.src = route.url;
+      video.controls = true;
+      video.style.width = '100%';
+      playerContainer.appendChild(video);
+      video.play();
+    }
   }
 }
-
 async function addLocation() {
   const name = document.getElementById('newLocationName').value.trim();
   if (!name) {
