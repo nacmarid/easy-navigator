@@ -214,7 +214,6 @@ function playRoute() {
 async function addLocation() {
   const name = document.getElementById('newLocationName')?.value?.trim();
   if (!name) return alert('Введите название локации');
-
   try {
     const res = await fetch('/api/locations', {
       method: 'POST',
@@ -390,7 +389,7 @@ window.onload = () => {
     document.getElementById('mainInterface').style.display = 'block';
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      currentUser = { role: payload.role };
+      currentUser = { role: payload.role, username: payload.username };
       document.getElementById('userInfo').textContent = `👤 ${payload.username} (${payload.role})`;
       if (payload.role === 'developer') {
         document.getElementById('adminPanelBtn').style.display = 'block';
