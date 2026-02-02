@@ -183,7 +183,12 @@ function playRoute() {
       video.play();
     } else if (route.includes('rutube.ru/play/embed/')) {
       const iframe = document.createElement('iframe');
-      iframe.src = route.trim();
+    const cleanUrl = route.trim();
+if (!cleanUrl) {
+  console.error('Empty URL after trim');
+  return;
+}
+iframe.src = cleanUrl;
       iframe.width = '100%';
       iframe.height = '400';
       iframe.frameBorder = '0';

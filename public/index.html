@@ -1,94 +1,83 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Secure Navigator</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy Navigator</title>
   <link rel="stylesheet" href="indexDesign.css" />
 </head>
 <body>
-  <div class="container">
-    <div id="loginForm" class="card controls">
-      <h3>Вход</h3>
-      <input type="text" id="loginUser" class="select" placeholder="Логин">
-      <input type="password" id="loginPass" class="select" placeholder="Пароль">
-      <button onclick="login()" class="btn btn-primary">Войти</button>
-      <button onclick="showRegister()" class="btn btn-ghost">Регистрация</button>
-    </div>
+  <!-- Форма входа -->
+  <div id="loginForm" class="auth-form">
+    <h2>Вход</h2>
+    <input type="text" id="loginUser" placeholder="Логин" />
+    <input type="password" id="loginPass" placeholder="Пароль" />
+    <button onclick="login()">Войти</button>
+    <button onclick="showRegister()">Регистрация</button>
+  </div>
 
-    <div id="registerForm" class="card controls" style="display:none;">
-      <h3>Регистрация</h3>
-      <input type="text" id="regUser" class="select" placeholder="Логин">
-      <input type="password" id="regPass" class="select" placeholder="Пароль (мин. 8)">
-      <button onclick="register()" class="btn btn-primary">Зарегистрироваться</button>
-      <button onclick="showLogin()" class="btn btn-ghost">Вход</button>
-    </div>
+  <!-- Форма регистрации -->
+  <div id="registerForm" class="auth-form" style="display: none;">
+    <h2>Регистрация</h2>
+    <input type="text" id="regUser" placeholder="Логин" />
+    <input type="password" id="regPass" placeholder="Пароль (мин. 8 символов)" />
+    <button onclick="register()">Зарегистрироваться</button>
+    <button onclick="showLogin()">Вход</button>
+  </div>
 
-    <div id="mainInterface" style="display:none;">
-      <header class="card header">
-        <div class="brand"><strong>Навигация</strong></div>
+  <!-- Основной интерфейс -->
+  <div id="mainInterface" style="display: none;">
+    <div class="container">
+      <header class="header">
+        <div class="brand"><strong>Easy Navigator</strong></div>
         <div class="header-actions">
-          <span id="userInfo" class="status"></span>
-          <button id="themeToggle" class="theme-toggle">🌙 /☀️</button>
-          <button id="adminPanelBtn" class="btn btn-ghost" style="display:none;">Панель управления</button>
-          <button onclick="logout()" class="btn btn-ghost">Выйти</button>
+          <div class="status" id="userInfo">👤 Пользователь</div>
+          <button class="theme-toggle" id="themeToggle">☀️</button>
+          <button onclick="logout()">Выйти</button>
+          <button id="adminPanelBtn" style="display: none;">Панель управления</button>
         </div>
       </header>
 
-      <div class="container-content">
-        <aside class="card controls">
-          <div class="control-row">
-            <label class="label">Откуда</label>
-            <select id="fromSelect" class="select"></select>
-          </div>
-          <div class="control-row">
-            <label class="label">Куда</label>
-            <select id="toSelect" class="select"></select>
-          </div>
-          <button id="applyBtn" class="btn btn-primary">Воспроизвести</button>
-          
-          <div class="section-title">Добавить контент</div>
-          <div class="control-row">
-            <input type="text" id="newLocationName" class="select" placeholder="Название новой локации">
-            <button onclick="addLocation()" class="btn btn-primary" style="margin-top: 8px;">Добавить локацию</button>
-          </div>
-          
-          <div class="control-row">
-            <label class="label">Маршрут</label>
-            <select id="newRouteFrom" class="select"></select>
-            <select id="newRouteTo" class="select" style="margin-top: 8px;"></select>
-            <input type="text" id="newVideoUrl" class="select" placeholder="URL видео" style="margin-top: 8px;">
-            <button onclick="addRoute()" class="btn btn-primary" style="margin-top: 8px;">Добавить маршрут</button>
-          </div>
-        </aside>
+      <div class="controls">
+        <div class="control-row">
+          <label class="label">Откуда</label>
+          <select id="fromSelect" class="select">
+            <option>Выберите локацию</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label class="label">Куда</label>
+          <select id="toSelect" class="select">
+            <option>Выберите локацию</option>
+          </select>
+        </div>
+        <button id="applyBtn" class="btn btn-primary">Воспроизвести</button>
+      </div>
 
-        <main>
-          <section class="card player-area">
-            <video id="player" controls playsinline></video>
-            <div id="videoInfo" class="meta"></div>
-          </section>
-        </main>
+      <div class="player-area">
+        <div class="player">
+          <div id="player"></div>
+        </div>
+        <div class="meta muted" id="routeMeta"></div>
       </div>
     </div>
   </div>
 
-  <div id="adminModal" class="modal" style="display:none;">
+  <!-- Модальное окно админки -->
+  <div id="adminModal" class="modal" style="display: none;">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Панель управления</h3>
-        <button onclick="closeAdminPanel()" class="btn btn-ghost">×</button>
+        <button onclick="closeAdminPanel()">×</button>
       </div>
       <div class="modal-body">
         <div class="tabs">
           <button class="tab-btn active" onclick="openTab('pendingTab')">Ожидающие</button>
           <button class="tab-btn" onclick="openTab('logsTab')">Логи</button>
         </div>
-        
         <div id="pendingTab" class="tab-content active">
           <div id="pendingList"></div>
         </div>
-        
         <div id="logsTab" class="tab-content">
           <div id="logsList"></div>
         </div>
@@ -96,7 +85,13 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.10"></script>
+  <script>
+    // Добавляем функцию log()
+    function log(message) {
+      console.log(message);
+      alert(message);
+    }
+  </script>
   <script src="navigationScript.js"></script>
 </body>
 </html>

@@ -1,0 +1,257 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "$2b$12$1dW1cTOI8XesD01bBWGXZO6Spv6P1sa6qdGd1Lcj5L3KscX/z5KjW",
+      "role": "developer"
+    },
+    {
+      "id": 1762929030405,
+      "username": "12345678",
+      "password": "$2b$12$8.GvIP9NdnsVQ.MExiILC.8FPUsHK2FuAhlQkJnskfRU5QvfcI1tC",
+      "role": "user"
+    }
+  ],
+  "pendingSubmissions": [],
+  "approvedData": {
+    "locations": [
+      {
+        "id": 1,
+        "name": "Арзамас 1"
+      },
+      {
+        "id": 2,
+        "name": "Арзамас 2"
+      },
+      {
+        "id": 1762931422315,
+        "name": "Тестирование"
+      },
+      {
+        "id": 1762931452336,
+        "name": "Тестирование_user"
+      }
+    ],
+    "routes": {}
+  },
+  "logs": [
+    {
+      "id": 1763376359601,
+      "timestamp": "2025-11-17T10:45:59.601Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    },
+    {
+      "id": 1762968903023,
+      "timestamp": "2025-11-12T17:35:03.023Z",
+      "action": "login",
+      "user": "12345678",
+      "userId": 1762929030405,
+      "role": "user",
+      "details": {}
+    },
+    {
+      "id": 1762968873148,
+      "timestamp": "2025-11-12T17:34:33.148Z",
+      "action": "reject_submission",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {
+        "submissionId": 1762968853804,
+        "type": "location"
+      }
+    },
+    {
+      "id": 1762968853824,
+      "timestamp": "2025-11-12T17:34:13.824Z",
+      "action": "add_location_submission",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {
+        "locationName": "123456789"
+      }
+    },
+    {
+      "id": 1762968836878,
+      "timestamp": "2025-11-12T17:33:56.878Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    },
+    {
+      "id": 1762932676134,
+      "timestamp": "2025-11-12T07:31:16.134Z",
+      "action": "login",
+      "user": "12345678",
+      "userId": 1762929030405,
+      "role": "user",
+      "details": {}
+    },
+    {
+      "id": 1762932616842,
+      "timestamp": "2025-11-12T07:30:16.842Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    },
+    {
+      "id": 1762932440350,
+      "timestamp": "2025-11-12T07:27:20.350Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    },
+    {
+      "id": 1762931569981,
+      "timestamp": "2025-11-12T07:12:49.981Z",
+      "action": "approve_submission",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {
+        "submissionId": 1762931452336,
+        "type": "location",
+        "data": {
+          "id": 1762931452336,
+          "name": "Тестирование_user"
+        }
+      }
+    },
+    {
+      "id": 1762931567911,
+      "timestamp": "2025-11-12T07:12:47.911Z",
+      "action": "approve_submission",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {
+        "submissionId": 1762931422315,
+        "type": "location",
+        "data": {
+          "id": 1762931422315,
+          "name": "Тестирование"
+        }
+      }
+    },
+    {
+      "id": 1762931487060,
+      "timestamp": "2025-11-12T07:11:27.060Z",
+      "action": "reject_submission",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {
+        "submissionId": 1762928878633,
+        "type": "location"
+      }
+    },
+    {
+      "id": 1762931481138,
+      "timestamp": "2025-11-12T07:11:21.138Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    },
+    {
+      "id": 1762931452366,
+      "timestamp": "2025-11-12T07:10:52.366Z",
+      "action": "add_location_submission",
+      "user": "12345678",
+      "userId": 1762929030405,
+      "role": "user",
+      "details": {
+        "locationName": "Тестирование_user"
+      }
+    },
+    {
+      "id": 1762931442786,
+      "timestamp": "2025-11-12T07:10:42.786Z",
+      "action": "login",
+      "user": "12345678",
+      "userId": 1762929030405,
+      "role": "user",
+      "details": {}
+    },
+    {
+      "id": 1762931422330,
+      "timestamp": "2025-11-12T07:10:22.330Z",
+      "action": "add_location_submission",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {
+        "locationName": "Тестирование"
+      }
+    },
+    {
+      "id": 1762931376796,
+      "timestamp": "2025-11-12T07:09:36.796Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    },
+    {
+      "id": 1762929035215,
+      "timestamp": "2025-11-12T06:30:35.215Z",
+      "action": "login",
+      "user": "12345678",
+      "userId": 1762929030405,
+      "role": "user",
+      "details": {}
+    },
+    {
+      "id": 1762929030435,
+      "timestamp": "2025-11-12T06:30:30.435Z",
+      "action": "register",
+      "user": "12345678",
+      "userId": 1762929030405,
+      "role": "user",
+      "details": {}
+    },
+    {
+      "id": 1762929022023,
+      "timestamp": "2025-11-12T06:30:22.023Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    },
+    {
+      "id": 1762928878653,
+      "timestamp": "2025-11-12T06:27:58.653Z",
+      "action": "add_location_submission",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {
+        "locationName": "вывавы"
+      }
+    },
+    {
+      "id": 1762883255300,
+      "timestamp": "2025-11-11T17:47:35.300Z",
+      "action": "login",
+      "user": "admin",
+      "userId": 1,
+      "role": "developer",
+      "details": {}
+    }
+  ]
+}
