@@ -1,81 +1,84 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Secure Navigator</title>
-  <link rel="stylesheet" href="indexDesign.css">
+  <link rel="stylesheet" href="indexDesign.css" />
 </head>
 <body>
-  <!-- Логин/Регистрация -->
+
+  <!-- Форма входа -->
   <div id="loginForm">
     <h2>Вход</h2>
-    <input id="loginUser" placeholder="Логин" type="text"><br><br>
-    <input id="loginPass" placeholder="Пароль" type="password"><br><br>
+    <input type="text" id="loginUser" placeholder="Логин" />
+    <input type="password" id="loginPass" placeholder="Пароль" />
     <button onclick="login()">Войти</button>
     <button onclick="showRegister()">Регистрация</button>
-  </div  <div id="registerForm" style="display:none">
+  </div>
+
+  <!-- Форма регистрации -->
+  <div id="registerForm" style="display:none;">
     <h2>Регистрация</h2>
-    <input id="regUser" placeholder="Логин" type="text"><br><br>
-    <input id="regPass" placeholder="Пароль (≥8)" type="password"><br><br>
+    <input type="text" id="regUser" placeholder="Логин" />
+    <input type="password" id="regPass" placeholder="Пароль (мин. 8 символов)" />
     <button onclick="register()">Зарегистрироваться</button>
     <button onclick="showLogin()">Вход</button>
   </div>
 
-  <!-- Главный интерфейс -->
-  <div id="mainInterface" style="display:none">
+  <!-- Основной интерфейс -->
+  <div id="mainInterface" style="display:none;">
     <div class="container">
       <header class="header">
         <div class="brand"><strong>Secure Navigator</strong></div>
         <div class="header-actions">
           <span id="userInfo">👤 Пользователь</span>
-          <button id="themeToggle" class="theme-toggle">🌙</button>
-          <button onclick="logout()" class="btn btn-ghost">Выйти</button>
-          <button id="adminPanelBtn" style="display:none" class="btn btn-ghost">Панель управления</button>
+          <button id="themeToggle" class="theme-toggle">☀️</button>
+          <button onclick="logout()">Выйти</button>
+          <button id="adminPanelBtn" style="display:none;">Панель управления</button>
         </div>
       </header>
 
       <div class="controls">
-        <h3 class="section-title">Навигация</h3        <div class="control-row">
+        <h3 class="section-title">Навигация</h3>
+        <div class="control-row">
           <label class="label">Откуда</label>
           <select id="fromSelect" class="select"><option>Выберите локацию</option></select>
         </div>
         <div class="control-row">
-          <="label">Куда</label>
+          <label class="label">Куда</label>
           <select id="toSelect" class="select"><option>Выберите локацию</option></select>
         </div>
-        <div class="actions">
-          <button id="applyBtn" class="btn btn-primary">Воспроизвести</button>
-        </div>
+        <button id="applyBtn" class="btn btn-primary">Воспроизвести</button>
 
         <h3 class="section-title">Добавить контент</h3>
         <div class="control-row">
           <label class="label">Добавить локацию</label>
-          <input id="newLocationName" class="select" placeholder="Название локации">
-          <buttonaddLocation()" class="btn btn-primary">Добавить</button>
+          <input id="newLocationName" class="select" placeholder="Название локации" />
+          <button onclick="addLocation()" class="btn btn-primary">Добавить</button>
         </div>
         <div class="control-row">
           <label class="label">Маршрут</label>
           <select id="newRouteFrom" class="select"><option>Из...</option></select>
           <select id="newRouteTo" class="select"><option>В...</option></select>
-          <input id="newVideoUrl" class="select" placeholder="URL видео (RuTube, MP4, m3u8)">
+          <input id="newVideoUrl" class="select" placeholder="URL видео (RuTube, MP4, m3u8)" />
           <button onclick="addRoute()" class="btn btn-primary">Добавить маршрут</button>
         </div>
       </div>
 
       <div class="player-area">
-        <div class="player" id="player"></div>
+        <div id="player"></div>
         <div class="meta muted">Выберите маршрут для воспроизведения</div>
       </div>
     </div>
   </div>
 
-  <!-- Админ-панель (модалка) -->
-  <div id="adminModal" class="modal" style="display:none">
+  <!-- Модальное окно админки -->
+  <div id="adminModal" class="modal" style="display:none;">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Панель управления</h3>
-        <button onclick="closeAdminPanel()" class="btn btn-ghost">×</button>
+        <button onclick="closeAdminPanel()">×</button>
       </div>
       <div class="tabs">
         <button class="tab-btn active" onclick="openTab('pendingTab')">Ожидающие</button>
@@ -85,7 +88,7 @@
         <div id="pendingTab" class="tab-content active">
           <div id="pendingList"></div>
         </div>
-        <div id="logsTab" class="tab-content" style="display:none">
+        <div id="logsTab" class="tab-content" style="display:none;">
           <div id="logsList"></div>
         </div>
       </div>
