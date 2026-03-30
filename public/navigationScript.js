@@ -145,7 +145,43 @@ function updateLocationSelects() {
     });
   }
 }
+async function loadApprovedList() {
+  const data = approvedData; // уже загружено через /api/approved-data
+  
+  const list = document.getElementById('approvedList');
+  list.innerHTML = '';
 
+  // Локации
+  data.locations.forEach(loc => {
+    const el = document.createElement('div');
+    el.className = 'submission-item';
+    el.innerHTML = `
+      <strong>📍 ${loc.name}</strong>
+      <div class="submission-actions">
+        <button onclick="deleteLocation(${loc.id})" class="btn btn-ghost">🗑️ Удалить</button>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+
+  // Маршруты
+  Object.entries(data.routes).forEach(([key, url]) => {
+    const [fromId, toId] = key.split('|').map(Number);
+    const fromName = data.locations.find(l => l.id === fromId)?.name || '???';
+    const toName = data.locations.find(l => l.id === toId)?.name || '???';
+
+    const el = document.createElement('div');
+    el.className = 'submission-item';
+    el.innerHTML = `
+      <strong>🎬 ${fromName} → ${toName}</strong><br>
+      <small>${url}</small>
+      <div class="submission-actions">
+        <button onclick="deleteRoute(${fromId}, ${toId})" class="btn btn-ghost">🗑️ Удалить</button>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+}
 // === ВОСПРОИЗВЕДЕНИЕ ===
 function playRoute() {
   const fromSelect = document.getElementById('fromSelect');
@@ -287,7 +323,7 @@ function openTab(tabName) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(tabName).classList.add('active');
   event.target.classList.add('active');
-  if (tabName === 'logsTab') loadLogs();
+  if (tabName === 'approvedTab') loadApprovedList();
 }
 
 async function loadPendingSubmissions() {
@@ -345,6 +381,40 @@ async function loadLogs() {
     console.error('Error loading logs:', error);
     alert('Ошибка загрузки логов');
   }
+}
+
+async function deleteLocation(id) {
+  if (!confirm('Удалить локацию и все связанные маршруты?')) return;
+  try {
+    const res = await fetch(`/api/locations/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${currentToken}` }
+    });
+    if (res.ok) {
+      alert('Удалено');
+      loadApprovedData(); // перезагрузить данные
+      loadApprovedList(); // обновить список
+    } else {
+      alert('Ошибка удаления');
+    }
+  } catch (e) { console.error(e); alert('Ошибка'); }
+}
+
+async function deleteRoute(fromId, toId) {
+  if (!confirm('Удалить маршрут?')) return;
+  try {
+    const res = await fetch(`/api/routes/${fromId}/${toId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${currentToken}` }
+    });
+    if (res.ok) {
+      alert('Удалено');
+      loadApprovedData();
+      loadApprovedList();
+    } else {
+      alert('Ошибка удаления');
+    }
+  } catch (e) { console.error(e); alert('Ошибка'); }
 }
 
 async function approveSubmission(id) {

@@ -223,6 +223,47 @@ app.post('/api/locations', authenticate, [
   });
 });
 
+
+// Удалить маршрут
+app.delete('/api/routes/:fromId/:toId', authenticate, requireRole(['developer']), (req, res) => {
+  const { fromId, toId } = req.params;
+  const routeKey = `${fromId}|${toId}`;
+  const data = readData();
+  
+  if (!data.approvedData.routes[routeKey]) {
+    return res.status(404).json({ error: 'Маршрут не найден' });
+  }
+
+  delete data.approvedData.routes[routeKey];
+  writeData(data);
+  addLog('delete_route', req.user, { routeKey });
+  res.json({ message: 'Маршрут удалён' });
+});
+
+// Удалить локацию
+app.delete('/api/locations/:id', authenticate, requireRole(['developer']), (req, res) => {
+  const { id } = req.params;
+  const data = readData();
+  
+  const locationIndex = data.approvedData.locations.findIndex(loc => loc.id == id);
+  if (locationIndex === -1) {
+    return res.status(404).json({ error: 'Локация не найдена' });
+  }
+
+  // Удаляем все маршруты, связанные с этой локацией
+  const routesToDelete = Object.keys(data.approvedData.routes).filter(key =>
+    key.startsWith(`${id}|`) || key.endsWith(`|${id}`)
+  );
+  routesToDelete.forEach(key => delete data.approvedData.routes[key]);
+
+  // Удаляем саму локацию
+  data.approvedData.locations.splice(locationIndex, 1);
+  writeData(data);
+  addLog('delete_location', req.user, { locationId: id, deletedRoutes: routesToDelete.length });
+  res.json({ message: 'Локация и связанные маршруты удалены' });
+});
+
+
 // Добавление маршрута с видео (user)
 app.post('/api/routes', authenticate, [
   body('fromLocationId').isInt({ min: 1 }).withMessage('ID начальной локации обязательно'),

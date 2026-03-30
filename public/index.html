@@ -88,6 +88,18 @@
         <div id="pendingTab" class="tab-content active">
           <div id="pendingList"></div>
         </div>
+		
+				<!-- В index.html, внутри .modal -->
+		<div class="tabs">
+		  <button class="tab-btn active" onclick="openTab('pendingTab')">Ожидающие</button>
+		  <button class="tab-btn" onclick="openTab('approvedTab')">Одобренные</button>
+		  <button class="tab-btn" onclick="openTab('logsTab')">Логи</button>
+		</div>
+
+		<div id="approvedTab" class="tab-content">
+		  <div id="approvedList"></div>
+		</div>
+		
         <div id="logsTab" class="tab-content" style="display:none;">
           <div id="logsList"></div>
         </div>
