@@ -145,6 +145,7 @@ function updateLocationSelects() {
     });
   }
 }
+
 async function loadApprovedList() {
   const data = approvedData; // уже загружено через /api/approved-data
   
@@ -182,6 +183,27 @@ async function loadApprovedList() {
     list.appendChild(el);
   });
 }
+
+// === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ОБРАБОТКИ URL ===
+
+// Извлекает src из iframe, если передан код iframe
+function extractVideoUrl(input) {
+  const iframeMatch = input.match(/<iframe.*src=["']([^"']+)["']/i);
+  if (iframeMatch && iframeMatch[1]) {
+    return iframeMatch[1];
+  }
+  return input;
+}
+
+// Преобразует обычную ссылку RuTube в embed-ссылку для встраивания
+function convertToEmbedUrl(url) {
+  const rutubeMatch = url.match(/rutube\.ru\/video\/([a-f0-9]+)/i);
+  if (rutubeMatch && rutubeMatch[1]) {
+    return `https://rutube.ru/play/embed/${rutubeMatch[1]}/`;
+  }
+  return url;
+}
+
 // === ВОСПРОИЗВЕДЕНИЕ ===
 function playRoute() {
   const fromSelect = document.getElementById('fromSelect');
@@ -201,10 +223,23 @@ function playRoute() {
   }
 
   const routeKey = `${a}|${b}`;
-  const route = approvedData?.routes?.[routeKey];
+  let route = approvedData?.routes?.[routeKey];
   if (!route) {
     console.log('Видео не найдено');
     return;
+  }
+
+  // Если строка — преобразуем её (из iframe или обычной rutube ссылки)
+  if (typeof route === 'string') {
+    route = extractVideoUrl(route);
+    route = convertToEmbedUrl(route);
+  } else if (route && typeof route === 'object') {
+    // Если в будущем будет объект с полем url, обработаем и его
+    if (route.url) {
+      let url = extractVideoUrl(route.url);
+      url = convertToEmbedUrl(url);
+      route.url = url;
+    }
   }
 
   playerContainer.innerHTML = '';
@@ -219,12 +254,16 @@ function playRoute() {
       video.play();
     } else if (route.includes('rutube.ru/play/embed/')) {
       const iframe = document.createElement('iframe');
-    const cleanUrl = route.trim();
-if (!cleanUrl) {
-  console.error('Empty URL after trim');
-  return;
-}
-iframe.src = cleanUrl;
+      iframe.src = route.trim();
+      iframe.width = '100%';
+      iframe.height = '400';
+      iframe.frameBorder = '0';
+      iframe.allowFullscreen = true;
+      playerContainer.appendChild(iframe);
+    } else {
+      // Если ссылка не распознана, пробуем всё равно вставить как iframe (надежда на поддержку)
+      const iframe = document.createElement('iframe');
+      iframe.src = route.trim();
       iframe.width = '100%';
       iframe.height = '400';
       iframe.frameBorder = '0';
@@ -232,6 +271,7 @@ iframe.src = cleanUrl;
       playerContainer.appendChild(iframe);
     }
   } else if (route && typeof route === 'object') {
+    // Обработка объекта (если данные хранятся в таком виде)
     if (route.type === 'rutube') {
       const iframe = document.createElement('iframe');
       iframe.src = route.url.trim();
@@ -240,7 +280,7 @@ iframe.src = cleanUrl;
       iframe.frameBorder = '0';
       iframe.allowFullscreen = true;
       playerContainer.appendChild(iframe);
-    } else {
+    } else if (route.url) {
       const video = document.createElement('video');
       video.src = route.url;
       video.controls = true;
@@ -280,11 +320,19 @@ async function addLocation() {
 async function addRoute() {
   const from = document.getElementById('newRouteFrom')?.value;
   const to = document.getElementById('newRouteTo')?.value;
-  const videoUrl = document.getElementById('newVideoUrl')?.value?.trim();
+  let videoUrl = document.getElementById('newVideoUrl')?.value?.trim();
 
   if (!from || !to) return alert('Выберите начальную и конечную локации');
   if (from === to) return alert('Локации не могут совпадать');
   if (!videoUrl) return alert('Введите URL видео');
+
+  // Извлекаем src из iframe, если вставлен код
+  videoUrl = extractVideoUrl(videoUrl);
+
+  // Дополнительная проверка: URL должен начинаться с http:// или https://
+  if (!videoUrl.startsWith('http://') && !videoUrl.startsWith('https://')) {
+    return alert('Некорректный URL. Вставьте прямую ссылку на видео или iframe.');
+  }
 
   try {
     const res = await fetch('/api/routes', {
